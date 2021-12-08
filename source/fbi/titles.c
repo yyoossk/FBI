@@ -10,18 +10,18 @@
 #include "task/uitask.h"
 #include "../core/core.h"
 
-static list_item launch_title = {"Launch Title", COLOR_TEXT, action_launch_title};
-static list_item delete_title = {"Delete Title", COLOR_TEXT, action_delete_title};
-static list_item delete_title_ticket = {"Delete Title And Ticket", COLOR_TEXT, action_delete_title_ticket};
-static list_item extract_smdh = {"Extract SMDH", COLOR_TEXT, action_extract_smdh};
-static list_item import_seed = {"Import Seed", COLOR_TEXT, action_import_seed};
-static list_item browse_save_data = {"Browse Save Data", COLOR_TEXT, action_browse_title_save_data};
-static list_item import_save_data = {"Import Save Data", COLOR_TEXT, action_import_twl_save};
-static list_item export_save_data = {"Export Save Data", COLOR_TEXT, action_export_twl_save};
-static list_item erase_save_data = {"Erase Save Data", COLOR_TEXT, action_erase_twl_save};
-static list_item import_secure_value = {"Import Secure Value", COLOR_TEXT, action_import_secure_value};
-static list_item export_secure_value = {"Export Secure Value", COLOR_TEXT, action_export_secure_value};
-static list_item delete_secure_value = {"Delete Secure Value", COLOR_TEXT, action_delete_secure_value};
+static list_item launch_title = {"タイトルを起動", COLOR_TEXT, action_launch_title};
+static list_item delete_title = {"タイトルを削除", COLOR_TEXT, action_delete_title};
+static list_item delete_title_ticket = {"タイトルとチケットを削除する", COLOR_TEXT, action_delete_title_ticket};
+static list_item extract_smdh = {"SMDHを抽出する", COLOR_TEXT, action_extract_smdh};
+static list_item import_seed = {"シードのインポート", COLOR_TEXT, action_import_seed};
+static list_item browse_save_data = {"セーブデータを参照", COLOR_TEXT, action_browse_title_save_data};
+static list_item import_save_data = {"セーブデータをインポート", COLOR_TEXT, action_import_twl_save};
+static list_item export_save_data = {"セーブデータをエクスポート", COLOR_TEXT, action_export_twl_save};
+static list_item erase_save_data = {"セーブデータの消去", COLOR_TEXT, action_erase_twl_save};
+static list_item import_secure_value = {"安全な値のインポート", COLOR_TEXT, action_import_secure_value};
+static list_item export_secure_value = {"安全な値のエクスポート", COLOR_TEXT, action_export_secure_value};
+static list_item delete_secure_value = {"安全な値を削除する", COLOR_TEXT, action_delete_secure_value};
 
 typedef struct {
     populate_titles_data populateData;
@@ -105,7 +105,7 @@ static void titles_action_update(ui_view* view, void* data, linked_list* items, 
 static void titles_action_open(linked_list* items, list_item* selected) {
     titles_action_data* data = (titles_action_data*) calloc(1, sizeof(titles_action_data));
     if(data == NULL) {
-        error_display(NULL, NULL, "Failed to allocate titles action data.");
+        error_display(NULL, NULL, "タイトルアクションデータの割り当てに失敗しました。");
 
         return;
     }
@@ -113,7 +113,7 @@ static void titles_action_open(linked_list* items, list_item* selected) {
     data->items = items;
     data->selected = selected;
 
-    list_display("Title Action", "A: Select, B: Return", data, titles_action_update, titles_action_draw_top);
+    list_display("タイトルアクション", "A: 選択, B: 戻る", data, titles_action_update, titles_action_draw_top);
 }
 
 static void titles_options_add_entry(linked_list* items, const char* name, bool* val) {
@@ -176,17 +176,17 @@ static void titles_options_update(ui_view* view, void* data, linked_list* items,
     }
 
     if(linked_list_size(items) == 0) {
-        titles_options_add_entry(items, "Show game card", &listData->showGameCard);
-        titles_options_add_entry(items, "Show SD", &listData->showSD);
-        titles_options_add_entry(items, "Show NAND", &listData->showNAND);
-        titles_options_add_entry(items, "Sort by ID", &listData->sortById);
-        titles_options_add_entry(items, "Sort by name", &listData->sortByName);
-        titles_options_add_entry(items, "Sort by size", &listData->sortBySize);
+        titles_options_add_entry(items, "ゲームカードを表示する", &listData->showGameCard);
+        titles_options_add_entry(items, "SDを表示", &listData->showSD);
+        titles_options_add_entry(items, "NANDを表示", &listData->showNAND);
+        titles_options_add_entry(items, "IDで並べ替え", &listData->sortById);
+        titles_options_add_entry(items, "名前順", &listData->sortByName);
+        titles_options_add_entry(items, "サイズで並べ替え", &listData->sortBySize);
     }
 }
 
 static void titles_options_open(titles_data* data) {
-    list_display("Options", "A: Toggle, B: Return", data, titles_options_update, NULL);
+    list_display("オプション", "A: トグル, B: 戻る", data, titles_options_update, NULL);
 }
 
 static void titles_draw_top(ui_view* view, void* data, float x1, float y1, float x2, float y2, list_item* selected) {
@@ -231,14 +231,14 @@ static void titles_update(ui_view* view, void* data, linked_list* items, list_it
         listData->populateData.items = items;
         Result res = task_populate_titles(&listData->populateData);
         if(R_FAILED(res)) {
-            error_display_res(NULL, NULL, res, "Failed to initiate title list population.");
+            error_display_res(NULL, NULL, res, "タイトルリストの作成を開始できませんでした。");
         }
 
         listData->populated = true;
     }
 
     if(listData->populateData.finished && R_FAILED(listData->populateData.result)) {
-        error_display_res(NULL, NULL, listData->populateData.result, "Failed to populate title list.");
+        error_display_res(NULL, NULL, listData->populateData.result, "タイトルリストの入力に失敗しました。");
 
         listData->populateData.result = 0;
     }
@@ -312,7 +312,7 @@ static int titles_compare(void* data, const void* p1, const void* p2) {
 void titles_open() {
     titles_data* data = (titles_data*) calloc(1, sizeof(titles_data));
     if(data == NULL) {
-        error_display(NULL, NULL, "Failed to allocate titles data.");
+        error_display(NULL, NULL, "タイトルデータの割り当てに失敗しました。");
 
         return;
     }
@@ -330,5 +330,5 @@ void titles_open() {
     data->sortByName = true;
     data->sortBySize = false;
 
-    list_display("Titles", "A: Select, B: Return, X: Refresh, Select: Options", data, titles_update, titles_draw_top);
+    list_display("タイトル", "A: 選択, B: 戻る, X: リフレッシュ, Select: オプション", data, titles_update, titles_draw_top);
 }
