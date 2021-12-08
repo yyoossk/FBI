@@ -9,7 +9,7 @@
 #define SMDH_ALL_REGIONS 0x7F
 
 static const char* smdh_region_strings[SMDH_NUM_REGIONS] = {
-        "Japan",
+        "日本",
         "North America",
         "Europe",
         "Australia",
@@ -24,9 +24,9 @@ void smdh_region_to_string(char* out, u32 region, size_t size) {
     }
 
     if(region == 0) {
-        snprintf(out, size, "Unknown");
+        snprintf(out, size, "不明");
     } else if((region & SMDH_ALL_REGIONS) == SMDH_ALL_REGIONS) {
-        snprintf(out, size, "Region Free");
+        snprintf(out, size, "リージョンフリー");
     } else {
         size_t pos = 0;
 
